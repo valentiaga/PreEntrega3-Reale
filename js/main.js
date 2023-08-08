@@ -50,7 +50,7 @@ function calculaTotalCompra() {
     let producto = prompt("Ingrese el producto que desea: \n 1 - Café ------------------ $1000\n 2 - Azúcar --------------- $100 \n 3 - Pancito --------------- $150\n 4 - Manteca -------------- $650 \n 5 - Dulce de leche -------- $620 \n 0 - Finalizar");
     while (producto != "0") {
         eligeProducto(producto);
-        let producto = prompt("Ingrese el producto que desea: \n 1 - Café ------------------ $1000\n 2 - Azúcar --------------- $100 \n 3 - Pancito --------------- $150\n 4 - Manteca -------------- $650 \n 5 - Dulce de leche -------- $620 \n 0 - Finalizar");
+        producto = prompt("Ingrese el producto que desea: \n 1 - Café ------------------ $1000\n 2 - Azúcar --------------- $100 \n 3 - Pancito --------------- $150\n 4 - Manteca -------------- $650 \n 5 - Dulce de leche -------- $620 \n 0 - Finalizar \n\n Total de su compra: $"+totalCompra);
     }
     alert("El total de su compra es: $" + totalCompra + " Productos ingresados: \nCafé: " + cantCafe + "\nAzúcar: " + cantAzucar + "\nPancito: " + cantPancito + "\nManteca: " + cantManteca + "\nDulce de Leche: " + cantDDL);
 }
