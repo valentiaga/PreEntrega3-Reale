@@ -16,27 +16,27 @@ function eligeProducto(producto) {
     let cantidad;
     switch (producto) {
         case "1":
-            cantidad = prompt("Ingrese la cantidad de unidades de 'Café' que desea.");
+            cantidad = parseInt(prompt("Ingrese la cantidad de unidades de 'Café' que desea."));
             cantCafe += cantidad;
             totalCompra += precioCafe * cantidad;
             break;
         case "2":
-            cantidad = prompt("Ingrese la cantidad de unidades de 'Azúcar' que desea.");
+            cantidad = parseInt(prompt("Ingrese la cantidad de unidades de 'Azúcar' que desea."));
             cantAzucar += cantidad;
             totalCompra += precioAzucar * cantidad;
             break;
         case "3":
-            cantidad = prompt("Ingrese la cantidad de unidades de 'Pancito' que desea.");
+            cantidad = parseInt(prompt("Ingrese la cantidad de unidades de 'Pancito' que desea."));
             cantPancito += cantidad;
             totalCompra += precioPancito * cantidad;
             break;
         case "4":
-            cantidad = prompt("Ingrese la cantidad de unidades de 'Manteca' que desea.");
+            cantidad = parseInt(prompt("Ingrese la cantidad de unidades de 'Manteca' que desea."));
             cantManteca += cantidad;
             totalCompra += precioManteca * cantidad;
             break;
         case "5":
-            cantidad = prompt("Ingrese la cantidad de unidades de 'Dulce de leche' que desea");
+            cantidad = parseInt(prompt("Ingrese la cantidad de unidades de 'Dulce de leche' que desea"));
             cantDDL += cantidad;
             totalCompra += precioDDL * cantidad;
             break;
