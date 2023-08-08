@@ -47,12 +47,12 @@ function eligeProducto(producto) {
 }
 
 function calculaTotalCompra() {
-    let producto = prompt("Ingrese el producto que desea: \n 1 - Café ------------------ $1000\n 2 - Azúcar --------------- $100 \n 3 - Pancito --------------- $150\n 4 - Manteca -------------- $650 \n 5 - Dulce de leche -------- $620 \n 0 - Finalizar");
+    let producto = prompt("Ingrese el producto que desea: \n 1 - Café ------------------ $"+precioCafe+ "\n 2 - Azúcar --------------- $"+precioAzucar+ " \n 3 - Pancito --------------- $"+precioPancito+ "\n 4 - Manteca -------------- $"+precioManteca+ " \n 5 - Dulce de leche -------- $"+precioDDL+ " \n 0 - Finalizar");
     while (producto != "0") {
         eligeProducto(producto);
-        producto = prompt("Ingrese el producto que desea: \n 1 - Café ------------------ $1000\n 2 - Azúcar --------------- $100 \n 3 - Pancito --------------- $150\n 4 - Manteca -------------- $650 \n 5 - Dulce de leche -------- $620 \n 0 - Finalizar \n\n Total de su compra: $"+totalCompra);
+        producto = prompt("Ingrese el producto que desea: \n 1 - Café ------------------ $"+precioCafe+ "\n 2 - Azúcar --------------- $"+precioAzucar+ " \n 3 - Pancito --------------- $"+precioPancito+ "\n 4 - Manteca -------------- $"+precioManteca+ " \n 5 - Dulce de leche -------- $"+precioDDL+ " \n 0 - Finalizar \n\n Total de su compra: $"+totalCompra);
     }
-    alert("El total de su compra es: $" + totalCompra + " Productos ingresados: \nCafé: " + cantCafe + "\nAzúcar: " + cantAzucar + "\nPancito: " + cantPancito + "\nManteca: " + cantManteca + "\nDulce de Leche: " + cantDDL);
+    alert("El total de su compra es: $" + totalCompra + " \nProductos ingresados: \n Café: " + cantCafe + "\n Azúcar: " + cantAzucar + "\n Pancito: " + cantPancito + "\n Manteca: " + cantManteca + "\n Dulce de Leche: " + cantDDL+ "\n\nGracias por su visita! 😁");
 }
 
 
