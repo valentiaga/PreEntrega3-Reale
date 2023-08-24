@@ -88,7 +88,7 @@ function calculaTotalCompra() {
 function muestraProductos() {
     let listadoElegidos = "";
     productosElegidos.forEach((element) => {
-        listadoElegidos += element.cant + " " + element.nombre + " " +element.caracteristica + "-------------- $" + element.precio + "\n";
+        listadoElegidos += element.cantidad + " " + element.nombre + " " +element.caracteristica + "-------------- $" + element.precio + "\n";
     });
     return listadoElegidos;
 }
@@ -97,14 +97,15 @@ function muestraProductos() {
 // Funcion ingresa productos al carrito
 function cargaProductos(opcion, indice) {
     let cantidad;
-    productosElegidos[indice] = productosDisponibles[opcion - 1];
+    productosElegidos[indice] = {nombre: productosDisponibles[opcion - 1].nombre, caracteristica: productosDisponibles[opcion - 1].caracteristica, cantidad: 0, precio: 0};
+    // productosElegidos[indice] = productosDisponibles[opcion - 1];
     cantidad = parseInt(prompt("Ingrese la cantidad de unidades de " + `${productosElegidos[indice].nombre} ${productosElegidos[indice].caracteristica}` + " que desea."));
     while (cantidad < 0){
         alert("Ingrese una cantidad mayor o igual 0");
         cantidad = parseInt(prompt("Ingrese la cantidad de unidades de " + `${productosElegidos[indice].nombre} ${productosElegidos[indice].caracteristica}` + " que desea."));
     }
-    productosElegidos[indice].cant += cantidad;
-    productosElegidos[indice].precio = productosElegidos[indice].cant * productosDisponibles[opcion - 1].precio;
+    productosElegidos[indice].cantidad += cantidad;
+    productosElegidos[indice].precio = productosElegidos[indice].cantidad * productosDisponibles[opcion - 1].precio;
     productosDisponibles[opcion - 1].stock = productosDisponibles[opcion - 1].stock - cantidad;
 }
 
