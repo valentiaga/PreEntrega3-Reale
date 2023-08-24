@@ -11,7 +11,23 @@
 
 .listaCarrito {
     list-style-type: none;
+}
 
+th,
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #E1E1E1;
+}
+
+th:first-child,
+td:first-child {
+    padding-left: 0;
+}
+
+th:last-child,
+td:last-child {
+    padding-right: 0;
 }
 
 .divHeader {
@@ -41,8 +57,8 @@ header {
     }
 }
 
-.borrar-curso {
-    background-color: red;
+.borrar-producto {
+    background-color: rgb(0, 0, 0);
     border-radius: 50%;
     padding: 5px 10px;
     text-decoration: none;
@@ -84,7 +100,6 @@ ul {
     display: block;
     position: absolute;
     right: 0;
-
     top: 100%;
     z-index: 1;
     background-color: white;
@@ -93,94 +108,8 @@ ul {
     min-width: 300px;
 }
 
-.vacio {
-    padding: 10px;
-    background-color: crimson;
-    text-align: center;
-    border-radius: 10px;
-    color: white;
-}
 
-.contenido-hero {
-    margin-top: 80px;
-    color: white;
-}
-
-.contenido-hero form {
-    position: relative;
-    margin-bottom: 0;
-}
-
-.contenido-hero form #buscador {
-    height: 50px;
-    margin-bottom: 0;
-}
-
-.contenido-hero form .submit-buscador {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    padding: 0;
-    display: block;
-    text-indent: -9999px;
-    width: 50px;
-    background-image: url(../img/lupa.png);
-    background-position: right center;
-    background-repeat: no-repeat;
-    border: none;
-}
-
-
-.barra {
-    padding: 20px 0;
-    background: #741d51;
-    /* Old browsers */
-    background: -moz-linear-gradient(left, #741d51 0%, #e44e52 100%);
-    /* FF3.6-15 */
-    background: -webkit-linear-gradient(left, #741d51 0%, #e44e52 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to right, #741d51 0%, #e44e52 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#741d51', endColorstr='#e44e52', GradientType=1);
-    /* IE6-9 */
-}
-
-.barra p {
-    margin: 0;
-    color: white;
-}
-
-.icono {
-    background-repeat: no-repeat;
-    background-position: left center;
-    padding-left: 60px;
-    background-size: 30px;
-    margin-bottom: 40px;
-    text-align: center;
-}
-
-@media (min-width: 750px) {
-    .icono {
-        margin-bottom: 0;
-    }
-}
-
-
-
-.icono1 {
-    background-image: url(../img/icono1.png);
-}
-
-.icono2 {
-    background-image: url(../img/icono2.png);
-}
-
-.icono3 {
-    background-image: url(../img/icono3.png);
-}
-
-#lista-cursos .row {
+#lista-productos .row {
     margin-bottom: 20px;
 }
 
@@ -234,9 +163,7 @@ ul {
     text-decoration: none;
 }
 
-/* Grid
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.container {
+.containerMio {
     position: relative;
     width: 100%;
     max-width: 960px;
@@ -244,14 +171,6 @@ ul {
     padding: 0 20px;
     box-sizing: border-box;
 }
-
-.column,
-.columns {
-    width: 100%;
-    float: left;
-    box-sizing: border-box;
-}
-
 
 
 html {

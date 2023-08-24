@@ -112,7 +112,7 @@ function insertarCurso(curso) {
         <td><img src="${curso.imagen}" width="100"></td>
         <td>${curso.titulo}</td>
         <td>${curso.precio}</td>
-        <td><a href="#" class="borrar-curso" data-id="${curso.id}">X</a></td>    
+        <td><a href="#" class="borrar-producto" data-id="${curso.id}">X</a></td>    
     `;
     listaCursos.appendChild(row);
     guardarCursoLocalStorage(curso);
@@ -126,7 +126,7 @@ function eliminarCurso(e)
 
     let curso, cursoId;
 
-    if (e.target.classList.contains('borrar-curso')) {
+    if (e.target.classList.contains('borrar-producto')) {
         e.target.parentElement.parentElement.remove(); 
     }  
     curso = e.target.parentElement.parentElement;
@@ -185,7 +185,7 @@ function leerLS()
         <td><img src="${curso.imagen}" width="100"></td>
         <td>${curso.titulo}</td>
         <td>${curso.precio}</td>
-        <td><a href="#" class="borrar-curso" data-id="${curso.id}">X</a></td>    
+        <td><a href="#" class="borrar-producto" data-id="${curso.id}">X</a></td>    
     `;
         listaCursos.appendChild(row);
 
