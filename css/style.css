@@ -139,7 +139,7 @@ ul {
 }
 
 .info-card .precio {
-    text-decoration: line-through;
+    /* text-decoration: line-through; */
     font-size: 18px;
     margin-top: 10px;
 }
