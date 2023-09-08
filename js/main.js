@@ -84,13 +84,15 @@ function insertaProducto(prod) {
         <td><a href="#" class="borrar-producto" data-id="${prod.id}">X</a></td>     
     `;
     carritoProductos.appendChild(row);
-    guardarProdLocalStorage(prod);
 
-    const total = document.getElementById('total-carrito');
-    total.innerHTML = (parseFloat(total.innerHTML) + parseFloat(prod.precio)).toFixed(2);
+    // const total = document.getElementById('total-carrito');
+    // total.innerHTML = (parseFloat(total.innerHTML) + parseFloat(prod.precio)).toFixed(2);
+    guardarProdLocalStorage(prod);
+    // guardarTotalLocalStorage(parseFloat(total.innerHTML));
+    actualizaTotalLocalStorage();
 }
 
-//eliminar curso del carrito en el DOM
+//eliminar producto del carrito en el DOM
 function eliminarProducto(e) {
     e.preventDefault();
 
@@ -104,6 +106,15 @@ function eliminarProducto(e) {
     eliminarProdLS(prodID);
 }
 
+
+function obtenerTotalLocalStorage() {
+    const total = 0.00;
+    if (localStorage.getItem('total') !== null) {
+        return localStorage.getItem('total');
+    }
+    return total;
+}
+
 function guardarProdLocalStorage(producto) {
     let productos;
     productos = obtenerProductosLocalStorage();
@@ -115,35 +126,32 @@ function guardarProdLocalStorage(producto) {
 //comprobar que hayan elementos en el LS
 function obtenerProductosLocalStorage() {
     let productosLS;
-    //comprobamos si no hay naad o es nulo, creamos el array vacío
-    // if (localStorage.getItem('productos') === null) {
-    //     productosLS = [];
-    // } else {
-    //     productosLS = JSON.parse(localStorage.getItem('productos'));
-    // }
+
     if (localStorage.getItem('productos') === null ? productosLS = [] : productosLS = JSON.parse(localStorage.getItem('productos')));
     return productosLS;
 }
 
 
-//pinta los productos desde LS en el carrito
-// function leerLS() {
-//     let productosLS;
+// pinta los productos desde LS en el carrito
+function leerLS() {
+    let productosLS;
 
-//     productosLS = obtenerProductosLocalStorage();
+    productosLS = obtenerProductosLocalStorage();
+    const total = document.getElementById('total-carrito');
+    total.innerHTML = obtenerTotalLocalStorage();
 
-//     productosLS.forEach(function (producto) {
-//         //Construimos el template
-//         const row = document.createElement("tr");
-//         row.innerHTML = `
-//         <td><img src="${producto.imagen}" width="100"></td>
-//         <td>${producto.nombre}</td>
-//         <td>${producto.precio}</td>
-//         <td><a href="#" class="borrar-producto" data-id="${producto.id}">X</a></td>    
-//     `;
-//         carritoProductos.appendChild(row);
-//     })
-// }
+    productosLS.forEach(function (producto) {
+        //Construimos el template
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td><img src="${producto.imagen}" width="100"></td>
+        <td>${producto.nombre}</td>
+        <td>${producto.precio}</td>
+        <td><a href="#" class="borrar-producto" data-id="${producto.id}">X</a></td>    
+    `;
+        carritoProductos.appendChild(row);
+    })
+}
 
 
 //vacia Carrito
@@ -157,21 +165,52 @@ function vaciarcarrito() {
     return false;
 }
 
+function actualizaTotalLocalStorage() {
+    // Obtén la referencia a la tabla por su ID
+    const tablaCarrito = document.getElementById("lista-carrito");
+
+    // Obtén todas las filas de la tabla (excepto la primera fila que contiene las cabeceras)
+    const filas = tablaCarrito.querySelectorAll("tbody tr");
+
+    // Inicializa una variable para almacenar la suma de precios
+    let total = 0;
+
+    // Recorre las filas y suma los precios
+    filas.forEach((fila) => {
+        // Encuentra el elemento que contiene el precio en cada fila (suponiendo que esté en la tercera columna)
+        const precioElement = fila.querySelector("td:nth-child(3)");
+        // Obtén el precio como texto y conviértelo a número (elimina el signo "$" si es necesario)
+        const precioTexto = precioElement.textContent.trim().replace("$", "");
+        const precio = parseFloat(precioTexto);
+
+        // Verifica si la conversión fue exitosa y suma el precio
+        if (!isNaN(precio)) {
+            total += precio;
+        }
+    });
+
+    const totalCarrito = document.getElementById('total-carrito');
+    totalCarrito.innerHTML = total.toFixed(2);
+    // El resultado estará en la variable "total"
+    console.log("Total de precios:", total);
+}
 
 //eliminar producto del LS
 function eliminarProdLS(producto) {
     let productosLS;
+    let precio = 0;
     //obtnemos el arreglo con los productos
     productosLS = obtenerProductosLocalStorage();
     //iteramo para buscar coincidencias y eliminar
     productosLS.forEach(function (productoLS, index) {
         if (productoLS.id === producto) {
+            precio = productoLS.precio;
             productosLS.splice(index, 1);
         }
     });
 
     localStorage.setItem('productos', JSON.stringify(productosLS));
-
+    actualizaTotalLocalStorage();
 }
 
 //eliminar todos los productos del LS
@@ -226,7 +265,7 @@ function compra() {
 }
 
 
-// Funcion calcula total de los productos del carrito 
+// Funcion calcula total de los productos del carrito
 function calculaTotalCompra() {
     let totalCompra = 0;
     productosElegidos.forEach((element, i) => {
