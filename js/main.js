@@ -9,26 +9,6 @@ class Producto {
     }
 }
 
-// class productoElegido {
-//     constructor(nombre, caracteristica, precio, descuento, total = 0, cant = 0) {
-//         this.nombre = nombre;
-//         this.caracteristica = caracteristica;
-//         this.precio = precio;
-//         this.total = total;
-//         this.descuento = descuento;
-//         this.cant = cant;
-//     }
-// }
-
-// const producto1 = new Producto('Cabezada', 'Cuero', 80000, 0, 0, 5);
-// const producto2 = new Producto('Cabezada', 'Cuero crudo', 50000, 0, 0, 5);
-// const producto3 = new Producto('Cabezada', 'Plata', 120000, 0, 0, 2);
-// const producto4 = new Producto('Montura', 'Cuero', 60000, 0, 0, 10);
-// const producto5 = new Producto('Recado', 'Plata', 200000, 0, 0, 6);
-// const producto6 = new Producto('Montura chilena', 'Plata', 90000, 0, 0, 3);
-
-// const productosDisponibles = [producto1, producto2, producto3, producto4, producto5, producto6];
-// const productosElegidos = [];
 const carrito = document.getElementById('carrito');
 const productosDisponibles = document.getElementById('lista-productos')
 const carritoProductos = document.querySelector('#lista-carrito tbody');
@@ -70,7 +50,6 @@ function leeDatosProducto(prod) {
         // descuento:
         id: prod.querySelector('a').getAttribute('data-id')
     }
-
     insertaProducto(infoProducto);
 }
 
@@ -85,10 +64,7 @@ function insertaProducto(prod) {
     `;
     carritoProductos.appendChild(row);
 
-    // const total = document.getElementById('total-carrito');
-    // total.innerHTML = (parseFloat(total.innerHTML) + parseFloat(prod.precio)).toFixed(2);
     guardarProdLocalStorage(prod);
-    // guardarTotalLocalStorage(parseFloat(total.innerHTML));
     actualizaTotalLocalStorage();
 }
 
@@ -151,6 +127,7 @@ function leerLS() {
     `;
         carritoProductos.appendChild(row);
     })
+    actualizaTotalLocalStorage();
 }
 
 
@@ -191,8 +168,7 @@ function actualizaTotalLocalStorage() {
 
     const totalCarrito = document.getElementById('total-carrito');
     totalCarrito.innerHTML = total.toFixed(2);
-    // El resultado estará en la variable "total"
-    console.log("Total de precios:", total);
+    // console.log("Total de precios:", total);
 }
 
 //eliminar producto del LS
