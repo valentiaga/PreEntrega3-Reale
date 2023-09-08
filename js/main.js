@@ -87,7 +87,7 @@ function insertaProducto(prod) {
     guardarProdLocalStorage(prod);
 
     const total = document.getElementById('total-carrito');
-    total.innerHTML = total.textContent + (prod.precio+total;
+    total.innerHTML = (parseFloat(total.innerHTML) + parseFloat(prod.precio)).toFixed(2);
 }
 
 //eliminar curso del carrito en el DOM
