@@ -277,6 +277,9 @@ a:hover {
     outline: 0;
 }
 
+#finalizar-compra{
+    border-color: rgb(121, 185, 121);
+}
 
 h4 {
     font-size: 25px;

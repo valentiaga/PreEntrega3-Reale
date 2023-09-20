@@ -13,7 +13,7 @@ const carrito = document.getElementById('carrito');
 const productosDisponibles = document.getElementById('lista-productos')
 const carritoProductos = document.querySelector('#lista-carrito tbody');
 const vaciarCarritoBtn = document.querySelector('#vaciar-carrito');
-
+const finalizarCompra = document.querySelector('#finalizar-compra');
 
 eventslisteners();
 
@@ -26,6 +26,9 @@ function eventslisteners() {
 
     //vaciar carrit de compras
     vaciarCarritoBtn.addEventListener('click', vaciarcarrito);
+
+    //finalizar compra
+    finalizarCompra.addEventListener('click', finalizaCompra);
 
     //mostrar lista de cursos en carrito de compra al cargar DOM-LS
     document.addEventListener('DOMContentLoaded', leerLS);
@@ -116,9 +119,9 @@ function leerLS() {
     total.innerHTML = obtenerTotalLocalStorage();
 
     productosLS.forEach(function (producto) {
-        
+
         //Desestructuracion
-        const {imagen, nombre, precio, id} = producto;
+        const { imagen, nombre, precio, id } = producto;
 
         //Construimos el template
         const row = document.createElement("tr");
@@ -134,16 +137,6 @@ function leerLS() {
 }
 
 
-//vacia Carrito
-function vaciarcarrito() {
-    while (carritoProductos.firstChild) {
-        carritoProductos.removeChild(carritoProductos.firstChild);
-    }
-    //vaciar carrito  de LS
-    vaciarLs();
-
-    return false;
-}
 
 function actualizaTotalLocalStorage() {
     // Obtén la referencia a la tabla por su ID
@@ -190,9 +183,67 @@ function eliminarProdLS(producto) {
     actualizaTotalLocalStorage();
 }
 
+//vacia Carrito
+function vaciarcarrito() {
+    const productos = obtenerProductosLocalStorage();
+    if (productos.length > 0) {
+        Swal.fire({
+            title: 'Estás seguro que deseas vaciar el carrito?',
+            text: "No podrás revertirlo",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                while (carritoProductos.firstChild) {
+                    carritoProductos.removeChild(carritoProductos.firstChild);
+                }
+                vaciarLs();
+                Swal.fire(
+                    'Eliminado!',
+                )
+                // return false;
+            }
+        })
+    }
+    else {
+        Swal.fire({
+            title: 'No tienes productos en el carrito',
+            icon: 'info'
+        })
+    }
+
+
+}
+
 //eliminar todos los productos del LS
 function vaciarLs() {
+    actualizaTotalLocalStorage();
     localStorage.clear();
+}
+
+
+//finalizar compra
+function finalizaCompra() {
+    const productos = obtenerProductosLocalStorage();
+    if (productos.length > 0) {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Compra realizada con éxito',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        vaciarcarrito();
+    }
+    else {
+        Swal.fire({
+            title: 'No tienes productos en el carrito',
+            icon: 'info'
+        })
+    }
 }
 
 
