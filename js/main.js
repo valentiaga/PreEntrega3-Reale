@@ -25,7 +25,7 @@ function eventslisteners() {
     carrito.addEventListener('click', eliminarProducto);
 
     //vaciar carrit de compras
-    vaciarCarritoBtn.addEventListener('click', vaciarcarrito);
+    vaciarCarritoBtn.addEventListener('click', confirmacionVaciarCarrito);
 
     //finalizar compra
     finalizarCompra.addEventListener('click', finalizaCompra);
@@ -184,7 +184,7 @@ function eliminarProdLS(producto) {
 }
 
 //vacia Carrito
-function vaciarcarrito() {
+function confirmacionVaciarCarrito() {
     const productos = obtenerProductosLocalStorage();
     if (productos.length > 0) {
         Swal.fire({
@@ -197,10 +197,7 @@ function vaciarcarrito() {
             confirmButtonText: 'Si'
         }).then((result) => {
             if (result.isConfirmed) {
-                while (carritoProductos.firstChild) {
-                    carritoProductos.removeChild(carritoProductos.firstChild);
-                }
-                vaciarLs();
+                vaciarCarrito();
                 Swal.fire(
                     'Eliminado!',
                 )
@@ -214,8 +211,13 @@ function vaciarcarrito() {
             icon: 'info'
         })
     }
+}
 
-
+function vaciarCarrito(){
+    while (carritoProductos.firstChild) {
+        carritoProductos.removeChild(carritoProductos.firstChild);
+    }
+    vaciarLs();
 }
 
 //eliminar todos los productos del LS
@@ -236,7 +238,7 @@ function finalizaCompra() {
             showConfirmButton: false,
             timer: 1500
         })
-        vaciarcarrito();
+        vaciarCarrito();
     }
     else {
         Swal.fire({
