@@ -317,3 +317,38 @@ h4 {
         padding: 0;
     }
 }
+
+/* Estilos para el control de cantidad */
+.cantidad-control {
+    display: flex;
+    align-items: center;
+}
+
+.aumentar-cantidad,
+.disminuir-cantidad {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #ccc;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    margin: 0 5px;
+    border-radius: 4px;
+}
+
+/* Estilos adicionales según tu preferencia */
+.cantidad-producto {
+    width: 40px;
+    text-align: center;
+    -webkit-appearance: none; /* Safari y Chrome */
+    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield; /* Otros navegadores */
+}
+
+.cantidad-producto::-webkit-outer-spin-button,
+.cantidad-producto::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}

@@ -1,0 +1,55 @@
+{  "cabezadas":[
+    {
+       "id":1,
+       "nombre":"Cabezada",
+       "descripcion": "Cuero",
+       "imagen":"CabezadaCaballo.jpeg",
+       "cantidad":4,
+       "precio":80000
+    },
+    {
+       "id":2,
+       "nombre":"Cabezada",
+       "descripcion": "Cuero crudo",
+       "imagen":"CabezadaCaballoCueroCrudo.webp",
+       "cantidad":8,
+       "precio":50000
+    },
+    {
+       "id":3,
+       "nombre":"Cabezada",
+       "descripcion": "Plata",
+       "imagen":"CabezadaCaballoPlata.jpeg",
+       "cantidad":3,
+       "precio":12000
+    }
+ ],
+ "monturas":[
+    {
+       "id":4,
+       "nombre":"Montura",
+       "descripcion": "Cuero",
+       "imagen":"MonturaCaballo1.jpeg",
+       "cantidad":2,
+       "precio":60000
+    },
+    {
+       "id":5,
+       "nombre":"Montura chilena",
+       "descripcion": "Montura chilena",
+       "imagen":"MonturaChilena.jpeg",
+       "cantidad":5,
+       "precio":90000
+    }
+ ],
+ "recados":[
+    {
+       "id":6,
+       "nombre":"Recado",
+       "descripcion": "Dato",
+       "imagen":"RecadoCaballo.webp",
+       "cantidad":12,
+       "precio":200000
+    }
+ ] 
+}

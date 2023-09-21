@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <link rel="stylesheet" href="./css/style.css">
     <title>Carrito</title>
 </head>
@@ -18,8 +20,7 @@
                 <div class=" offset-lg-7 col-lg-1">
                     <ul class="listaCarrito">
                         <li class="submenu">
-                            <img src="./img/carrito.png"
-                                width="30" id="img-carrito">
+                            <img src="./img/carrito.png" width="30" id="img-carrito">
                             <div id="carrito">
                                 <table id="lista-carrito" class="u-full-width">
                                     <thead>
@@ -32,7 +33,8 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                                <h5>Total: </h5> <h5 id="total-carrito">0.00</h5>
+                                <h5>Total: </h5>
+                                <h5 id="total-carrito">0.00</h5>
                                 <a href="#" id="vaciar-carrito" class="button u-full-width">Vaciar Carrito</a>
                                 <a href="#" id="finalizar-compra" class="button u-full-width">Comprar</a>
                             </div>
@@ -47,119 +49,39 @@
     <div id="hero">
     </div>
 
-    <div id="lista-productos" class="container containerMio">
-        <h1 id="encabezado" class="encabezado">Talabartería 'Jinete'</h1>
-        <h2 class="text-center">Productos</h2>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card">
-                    <img href="#" src="./img/CabezadaCaballo.jpeg" class=" u-full-width img-carrito">
-                    <div class="info-card">
-                        <h4>Cabezada</h4>
-                        <p>Cuero</p>
-                        <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
-                        $<p class="precio">80000</p>
-                        <!-- <span class="u-pull-right ">$15</span> -->
-                        <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="1">Agregar
-                            Al Carrito</a>
-                    </div>
-                </div> <!--.card-->
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="./img/CabezadaCaballoCueroCrudo.webp" class=" u-full-width">
-                    <div class="info-card">
-                        <h4>Cabezada</h4>
-                        <p>Cuero crudo</p>
-                        <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
-                        $<p class="precio">50000 </p>
-                        <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="2">Agregar
-                            Al Carrito</a>
-                    </div>
+    <h1 id="encabezado" class="encabezado">Talabartería 'Jinete'</h1>
+    <h2 class="text-center">Productos</h2>
+    <div class="container containerMio ">
+        <div id="lista-productos" class="row">
+
+        </div>
+    </div>
+    <footer id="footer" class="footer">
+        <div class="container containerMio">
+            <div class="row">
+                <div class="col-lg-4">
+                    <nav id="principal" class="menu">
+                        <a class="enlace" href="#">Contacto</a>
+                        <a class="enlace" href="#">Para tu Negocio</a>
+                    </nav>
+                </div>
+                <div class="col-lg-4">
+                    <nav id="secundaria" class="menu">
+                        <a class="enlace" href="#">¿Quienes Somos?</a>
+                        <a class="enlace" href="#">Soporte</a>
+                    </nav>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="./img/CabezadaCaballoPlata.jpeg" class="u-full-width">
-                    <div class="info-card">
-                        <h4>Cabezada</h4>
-                        <p>Plata</p>
-                        <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
-                        $<p class="precio">120000</p>
-                        <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="3">Agregar
-                            Al Carrito</a>
-                    </div>
-                </div> <!--.card-->
-            </div>
+        </div>
+    </footer>
 
-        </div> <!--.row-->
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="./img/MonturaCaballo1.jpeg" class="u-full-width">
-                    <div class="info-card">
-                        <h4>Montura</h4>
-                        <p>Cuero</p>
-                        <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
-                        $<p class="precio">60000</p>
-                        <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="4">Agregar
-                            Al Carrito</a>
-                    </div>
-                </div> <!--.card-->
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="./img/RecadoCaballo.webp" class="u-full-width">
-                    <div class="info-card">
-                        <h4>Recado</h4>
-                        <p>Dato</p>
-                        <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
-                        $<p class="precio">200000 </p>
-                        <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="5">Agregar
-                            Al Carrito</a>
-                    </div>
-                </div> <!--.card-->
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="./img/MonturaChilena.jpeg" class="u-full-width">
-                    <div class="info-card">
-                        <h4>Montura chilena</h4>
-                        <p>Montura chilena</p>
-                        <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
-                        $<p class="precio">90000 </p>
-                        <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="6">Agregar
-                            Al Carrito</a>
-                    </div>
-                </div> <!--.card-->
-            </div>
-        </div> <!--.row-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-        <footer id="footer" class="footer">
-            <div class="container containerMio">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <nav id="principal" class="menu">
-                            <a class="enlace" href="#">Contacto</a>
-                            <a class="enlace" href="#">Para tu Negocio</a>
-                        </nav>
-                    </div>
-                    <div class="col-lg-4">
-                        <nav id="secundaria" class="menu">
-                            <a class="enlace" href="#">¿Quienes Somos?</a>
-                            <a class="enlace" href="#">Soporte</a>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-            crossorigin="anonymous"></script>
-        <script src="./js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <script src="./js/main.js"></script>
 </body>
 
 </html>

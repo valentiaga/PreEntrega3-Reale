@@ -23,7 +23,7 @@ eventslisteners();
 const llenarMain=(arr)=>{
     setTimeout(() => {  //para simular retraso desde la BD
         arr.forEach((elem) => {
-            const {imagen,precio,nombre, descripcion, codigo}=elem
+            const {imagen,precio,nombre, descripcion, id}=elem
     
             div_productos.innerHTML += `
             <div class="col-lg-4">
@@ -35,7 +35,7 @@ const llenarMain=(arr)=>{
                             <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
                             <p class="precio">$${precio}</p>
                             <!-- <span class="u-pull-right ">$15</span> -->
-                            <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="${codigo}">Agregar
+                            <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="${id}">Agregar
                                 Al Carrito</a>
                         </div>
                     </div> <!--.card-->
@@ -54,7 +54,7 @@ fetch('../json/data.json')
         productos = cabezadas.concat(recados, monturas);
         llenarMain(productos);
         
-    })
+})
 
 
 
@@ -88,8 +88,9 @@ function eventslisteners() {
         }
         actualizaTotalLocalStorage();
     });
-}
 
+    
+}
 
 function comprarProducto(e) {
     e.preventDefault();
@@ -117,13 +118,12 @@ function leeDatosProducto(prod) {
         // descuento:
         id: prod.querySelector('a').getAttribute('data-id')
     }
-    
     insertaProducto(infoProducto);
 }
 
 // Funcion inserta producto en el carrito
 function insertaProducto(prod) {
-    const {imagen, nombre, precio}=prod;
+    const {imagen, nombre, precio, id}=prod;
     const row = document.createElement('tr');
     row.innerHTML = `
         <td><img src="${imagen}" width="100"></td>
@@ -131,29 +131,19 @@ function insertaProducto(prod) {
         <td>${precio}</td>
         <td>
             <div class="cantidad-control">
-                <span class="aumentar-cantidad">+</span>
-                <input type="number" class="cantidad-producto" value="1" min="1">
                 <span class="disminuir-cantidad">-</span>
+                <input type="number" class="cantidad-producto" value="1" min="1">
+                <span class="aumentar-cantidad">+</span>
             </div>
         </td>
-        <td><a href="#" class="borrar-producto" data-id="${prod.id}">X</a></td>     
+        <td class="precio-total">${precio}</td> <!-- Nuevo campo para el precio total -->
+        <td><a href="#" class="borrar-producto" data-id="${id}">X</a></td>     
     `;
     carritoProductos.appendChild(row);
 
     guardarProdLocalStorage(prod);
     actualizaTotalLocalStorage();
 }
-
-// function actualizarPrecioProducto(row, prod) {
-//     const cantidadInput = row.querySelector(".cantidad-producto");
-//     const precioCell = row.querySelector("td:nth-child(3)");
-
-//     const cantidad = parseInt(cantidadInput.value);
-//     const precioUnitario = parseFloat(prod.precio);
-//     const precioTotal = cantidad * precioUnitario;
-
-//     precioCell.textContent = `$${precioTotal.toFixed(2)}`;
-// }
 
 //eliminar producto del carrito en el DOM
 function eliminarProducto(e) {
@@ -213,19 +203,13 @@ function leerLS() {
         <td><img src="${imagen}" width="100"></td>
         <td>${nombre}</td>
         <td>${precio}</td>
-        <td>
-            <div class="cantidad-control">
-                <span class="aumentar-cantidad">+</span>
-                <input type="number" class="cantidad-producto" value="1" min="1">
-                <span class="disminuir-cantidad">-</span>
-            </div>
-        </td>
-        <td><a href="#" class="borrar-producto" data-id="${id}">X</a></td>       
+        <td><a href="#" class="borrar-producto" data-id="${id}">X</a></td>    
     `;
         carritoProductos.appendChild(row);
     })
     actualizaTotalLocalStorage();
 }
+
 
 function actualizaTotalLocalStorage() {
     // Obtén la referencia a la tabla por su ID
@@ -241,28 +225,53 @@ function actualizaTotalLocalStorage() {
     filas.forEach((fila) => {
         const cantidadElement = fila.querySelector(".cantidad-producto");
         const precioUnitarioElement = fila.querySelector("td:nth-child(3)");
-        // const precioTotalElement = fila.querySelector(".precio-total");
-        if(cantidadElement){
+        const precioTotalElement = fila.querySelector(".precio-total");
 
-            const cantidad = parseInt(cantidadElement.value);
-            console.log("Cantidad:", cantidad);
-            const precioUnitarioTexto = precioUnitarioElement.textContent.trim().replace("$", "");
-            const precioUnitario = parseFloat(precioUnitarioTexto);
-    
-            // Verifica si la conversión fue exitosa
-            if (!isNaN(cantidad) && !isNaN(precioUnitario)) {
-                const precioTotal = cantidad * precioUnitario;
-                // precioTotalElement.textContent = `$${precioTotal.toFixed(2)}`;
-                totalCarrito += precioTotal;
-            }
+        const cantidad = parseInt(cantidadElement.value);
+        const precioUnitarioTexto = precioUnitarioElement.textContent.trim().replace("$", "");
+        const precioUnitario = parseFloat(precioUnitarioTexto);
+
+        // Verifica si la conversión fue exitosa
+        if (!isNaN(cantidad) && !isNaN(precioUnitario)) {
+            const precioTotal = cantidad * precioUnitario;
+            precioTotalElement.textContent = `$${precioTotal.toFixed(2)}`;
+            totalCarrito += precioTotal;
         }
     });
 
     const totalCarritoElement = document.getElementById('total-carrito');
-    totalCarritoElement.innerHTML = totalCarrito.toFixed(2);
-        console.log("Total del carrito:", totalCarrito);
+    totalCarritoElement.textContent = totalCarrito.toFixed(2);
+    // console.log("Total del carrito:", totalCarrito);
 }
 
+// function actualizaTotalLocalStorage() {
+//     // Obtén la referencia a la tabla por su ID
+//     const tablaCarrito = document.getElementById("lista-carrito");
+
+//     // Obtén todas las filas de la tabla (excepto la primera fila que contiene las cabeceras)
+//     const filas = tablaCarrito.querySelectorAll("tbody tr");
+
+//     // Inicializa una variable para almacenar la suma de precios
+//     let total = 0;
+
+//     // Recorre las filas y suma los precios
+//     filas.forEach((fila) => {
+//         // Encuentra el elemento que contiene el precio en cada fila (suponiendo que esté en la tercera columna)
+//         const precioElement = fila.querySelector("td:nth-child(3)");
+//         // Obtén el precio como texto y conviértelo a número (elimina el signo "$" si es necesario)
+//         const precioTexto = precioElement.textContent.trim().replace("$", "");
+//         const precio = parseFloat(precioTexto);
+
+//         // Verifica si la conversión fue exitosa y suma el precio
+//         if (!isNaN(precio)) {
+//             total += precio;
+//         }
+//     });
+
+//     const totalCarrito = document.getElementById('total-carrito');
+//     totalCarrito.innerHTML = total.toFixed(2);
+//     // console.log("Total de precios:", total);
+// }
 
 //eliminar producto del LS
 function eliminarProdLS(producto) {
