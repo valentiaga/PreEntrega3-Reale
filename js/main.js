@@ -232,6 +232,7 @@ function obtenerProductosLocalStorage() {
 }
 
 
+
 function actualizaCantidadProducto(prod) {
     const tablaCarrito = document.getElementById("lista-carrito");
     const filas = tablaCarrito.querySelectorAll("tbody tr");
