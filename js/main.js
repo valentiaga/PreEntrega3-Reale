@@ -1,30 +1,28 @@
-class Producto {
-    constructor(nombre, caracteristica, precio, descuento, cant = 0, stock) {
-        this.nombre = nombre;
-        this.caracteristica = caracteristica;
-        this.precio = precio;
-        this.descuento = descuento;
-        this.cant = cant;
-        this.stock = stock;
-    }
-}
-
-const carrito = document.getElementById('carrito');
 const productosDisponibles = document.getElementById('lista-productos')
 const carritoProductos = document.querySelector('#lista-carrito tbody');
 const vaciarCarritoBtn = document.querySelector('#vaciar-carrito');
 const finalizarCompra = document.querySelector('#finalizar-compra');
-const div_productos=document.getElementById("lista-productos");
+const div_productos = document.getElementById("lista-productos");
 
 eventslisteners();
 
+// llamado a llenar main
+fetch('../json/data.json')
+    .then((resp) => resp.json())
+    .then((data) => {
+        let productos;
+        const { cabezadas, recados, monturas } = data;
+        productos = cabezadas.concat(recados, monturas);
+        llenarMain(productos);
+
+    })
 
 // Llenado de productos
-const llenarMain=(arr)=>{
+const llenarMain = (arr) => {
     setTimeout(() => {  //para simular retraso desde la BD
         arr.forEach((elem) => {
-            const {imagen,precio,nombre, descripcion, id}=elem
-    
+            const { imagen, precio, nombre, descripcion, id } = elem
+
             div_productos.innerHTML += `
             <div class="col-lg-4">
                     <div class="card">
@@ -45,25 +43,14 @@ const llenarMain=(arr)=>{
     }, 1000);
 }
 
-// llamado a llenar main
-fetch('../json/data.json')
-    .then( (resp) => resp.json() )
-    .then( (data) => {
-        let productos;
-        const {cabezadas, recados, monturas} = data;
-        productos = cabezadas.concat(recados, monturas);
-        llenarMain(productos);
-        
-    })
-
 
 
 function eventslisteners() {
 
-    productosDisponibles.addEventListener('click', comprarProducto);
+    //mostrar lista de cursos en carrito de compra al cargar DOM-LS
+    document.addEventListener('DOMContentLoaded', leerLS);
 
-    //eliminar curso en el carrito
-    carrito.addEventListener('click', eliminarProducto);
+    productosDisponibles.addEventListener('click', comprarProducto);
 
     //vaciar carrit de compras
     vaciarCarritoBtn.addEventListener('click', confirmacionVaciarCarrito);
@@ -71,157 +58,24 @@ function eventslisteners() {
     //finalizar compra
     finalizarCompra.addEventListener('click', finalizaCompra);
 
-    //mostrar lista de cursos en carrito de compra al cargar DOM-LS
-    document.addEventListener('DOMContentLoaded', leerLS);
 
     carritoProductos.addEventListener('click', (e) => {
         if (e.target.classList.contains('aumentar-cantidad')) {
             const inputCantidad = e.target.nextElementSibling;
             inputCantidad.value = parseInt(inputCantidad.value) + 1;
         }
-    
+
         if (e.target.classList.contains('disminuir-cantidad')) {
             const inputCantidad = e.target.previousElementSibling;
             if (parseInt(inputCantidad.value) > 1) {
                 inputCantidad.value = parseInt(inputCantidad.value) - 1;
             }
         }
+        if (e.target.classList.contains('borrar-producto')) {
+            eliminarProducto(e);
+        }
         actualizaTotalLocalStorage();
     });
-}
-
-
-function comprarProducto(e) {
-    e.preventDefault();
-    //delegation para agregar carrito
-    if (e.target.classList.contains("agregar-carrito")) {
-        const prod = e.target.parentElement.parentElement;
-        //enviamos el producto seleccionado para tomar sus datos
-        leeDatosProducto(prod);
-        Toastify({
-            text: "Producto agregado al carrito",
-            duration: 500,
-            gravity: 'top',
-            position: 'right',
-        }).showToast();
-    }
-    
-}
-
-//Funcion lee datos del producto
-function leeDatosProducto(prod) {
-
-    let bandera = 0;
-    let productosLS = obtenerProductosLocalStorage();
-    productosLS.forEach((elem, i)=>{
-        if (elem.id == prod.querySelector('a').getAttribute('data-id') && bandera==0){
-            elem.cantidad = parseInt(elem.cantidad) + 1;
-            console.log("Cantidad de "+ elem.nombre +" "+ elem.cantidad);
-            bandera = 1;
-            localStorage.setItem('productos', JSON.stringify(productosLS));
-            //actualizar cantidad en interfaz de usuario
-            actualizaCantidadProducto(elem);
-            actualizaTotalLocalStorage();
-            i++;
-        }
-    });
-    if (bandera==0){
-        const infoProducto = {
-            imagen: prod.querySelector('img').src,
-            nombre: prod.querySelector('h4').textContent,
-            precio: prod.querySelector('.precio').textContent,
-            id: prod.querySelector('a').getAttribute('data-id'),
-            cantidad: 1
-        }
-        
-        insertaProducto(infoProducto);
-    }
-}
-
-// Funcion inserta producto en el carrito
-function insertaProducto(prod) {
-    // let bandera = 0;
-    // let productosLS = obtenerProductosLocalStorage();
-    // productosLS.forEach((elem, i)=>{
-    //     if (elem.id == prod.id){
-    //         elem.cantidad = parseInt(elem.cantidad) + 1;
-    //         console.log("Cantidad de "+ elem.nombre +" "+ elem.cantidad);
-    //         bandera = 1;
-    //         localStorage.setItem('productos', JSON.stringify(productosLS));
-    //         //actualizar cantidad en interfaz de usuario
-    //     }
-    // });
-    // if (bandera == 0){
-        const {imagen, nombre, precio}=prod;
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><img src="${imagen}" width="100"></td>
-            <td>${nombre}</td>
-            <td>${precio}</td>
-            <td>
-                <div class="cantidad-control">
-                    <span class="aumentar-cantidad">+</span>
-                    <input type="number" class="cantidad-producto" value="1" min="1">
-                    <span class="disminuir-cantidad">-</span>
-                </div>
-            </td>
-            <td><a href="#" class="borrar-producto" data-id="${prod.id}">X</a></td>     
-        `;
-        carritoProductos.appendChild(row);
-        guardarProdLocalStorage(prod);
-    // }
-
-    
-    actualizaTotalLocalStorage();
-}
-
-// function actualizarPrecioProducto(row, prod) {
-//     const cantidadInput = row.querySelector(".cantidad-producto");
-//     const precioCell = row.querySelector("td:nth-child(3)");
-
-//     const cantidad = parseInt(cantidadInput.value);
-//     const precioUnitario = parseFloat(prod.precio);
-//     const precioTotal = cantidad * precioUnitario;
-
-//     precioCell.textContent = `$${precioTotal.toFixed(2)}`;
-// }
-
-//eliminar producto del carrito en el DOM
-function eliminarProducto(e) {
-    e.preventDefault();
-
-    let prod, prodID;
-
-    if (e.target.classList.contains('borrar-producto')) {
-        e.target.parentElement.parentElement.remove();
-    }
-    prod = e.target.parentElement.parentElement;
-    prodID = prod.querySelector('a').getAttribute('data-id');
-    eliminarProdLS(prodID);
-}
-
-
-function obtenerTotalLocalStorage() {
-    const total = 0.00;
-    if (localStorage.getItem('total') !== null) {
-        return localStorage.getItem('total');
-    }
-    return total;
-}
-
-function guardarProdLocalStorage(producto) {
-    let productos;
-    productos = obtenerProductosLocalStorage();
-    //El producto seleccionado se agrega al Array
-    productos.push(producto);
-    localStorage.setItem('productos', JSON.stringify(productos));
-}
-
-//devuelve los elementos que haya en el LS o un array vacio en caso de que no haya
-function obtenerProductosLocalStorage() {
-    const productosLS = JSON.parse(localStorage.getItem('productos')) || [];
-    // if (localStorage.getItem('productos') === null ? productosLS = [] : productosLS = JSON.parse(localStorage.getItem('productos')));
-    return productosLS;
 }
 
 
@@ -258,18 +112,137 @@ function leerLS() {
     actualizaTotalLocalStorage();
 }
 
-function actualizaCantidadProducto (prod){
+
+function comprarProducto(e) {
+    e.preventDefault();
+    //delegation para agregar carrito
+    if (e.target.classList.contains("agregar-carrito")) {
+        const prod = e.target.parentElement.parentElement;
+        //enviamos el producto seleccionado para tomar sus datos
+        leeDatosProducto(prod);
+        Toastify({
+            text: "Producto agregado al carrito",
+            duration: 500,
+            gravity: 'top',
+            position: 'right',
+        }).showToast();
+    }
+
+}
+
+//Funcion lee datos del producto
+function leeDatosProducto(prod) {
+
+    let bandera = 0;
+    let productosLS = obtenerProductosLocalStorage();
+    productosLS.forEach((elem, i) => {
+        if (elem.id == prod.querySelector('a').getAttribute('data-id') && bandera == 0) {
+            elem.cantidad = parseInt(elem.cantidad) + 1;
+            console.log("Cantidad de " + elem.nombre + " " + elem.cantidad);
+            bandera = 1;
+            localStorage.setItem('productos', JSON.stringify(productosLS));
+            //actualizar cantidad en interfaz de usuario
+            actualizaCantidadProducto(elem);
+            actualizaTotalLocalStorage();
+            i++;
+        }
+    });
+    if (bandera == 0) {
+        const infoProducto = {
+            imagen: prod.querySelector('img').src,
+            nombre: prod.querySelector('h4').textContent,
+            precio: prod.querySelector('.precio').textContent,
+            id: prod.querySelector('a').getAttribute('data-id'),
+            cantidad: 1
+        }
+        insertaProducto(infoProducto);
+    }
+}
+
+// Funcion inserta producto en el carrito
+function insertaProducto(prod) {
+    const { imagen, nombre, precio } = prod;
+    const row = document.createElement('tr');
+    row.innerHTML = `
+            <td><img src="${imagen}" width="100"></td>
+            <td>${nombre}</td>
+            <td>${precio}</td>
+            <td>
+                <div class="cantidad-control">
+                    <span class="aumentar-cantidad">+</span>
+                    <input type="number" class="cantidad-producto" value="1" min="1">
+                    <span class="disminuir-cantidad">-</span>
+                </div>
+            </td>
+            <td><a href="#" class="borrar-producto" data-id="${prod.id}">X</a></td>     
+        `;
+    carritoProductos.appendChild(row);
+    guardarProdLocalStorage(prod);
+    actualizaTotalLocalStorage();
+}
+
+//eliminar producto del carrito en el DOM
+function eliminarProducto(e) {
+    e.preventDefault();
+    let prod, prodID;
+
+    e.target.parentElement.parentElement.remove();
+
+    prod = e.target.parentElement.parentElement;
+    prodID = prod.querySelector('a').getAttribute('data-id');
+    eliminarProdLS(prodID);
+}
+
+//eliminar producto del LS
+function eliminarProdLS(producto) {
+    let productosLS;
+    let precio = 0;
+    //obtnemos el arreglo con los productos
+    productosLS = obtenerProductosLocalStorage();
+    //iteramo para buscar coincidencias y eliminar
+    productosLS.forEach(function (productoLS, index) {
+        //Operador avanzado &&
+        productoLS.id === producto && productosLS.splice(index, 1);
+    });
+
+    localStorage.setItem('productos', JSON.stringify(productosLS));
+    // actualizaTotalLocalStorage();
+}
+
+
+function obtenerTotalLocalStorage() {
+    const total = 0.00;
+    if (localStorage.getItem('total') !== null) {
+        return localStorage.getItem('total');
+    }
+    return total;
+}
+
+function guardarProdLocalStorage(producto) {
+    let productos;
+    productos = obtenerProductosLocalStorage();
+    productos.push(producto);
+    localStorage.setItem('productos', JSON.stringify(productos));
+}
+
+//devuelve los elementos que haya en el LS o un array vacio en caso de que no haya
+function obtenerProductosLocalStorage() {
+    const productosLS = JSON.parse(localStorage.getItem('productos')) || [];
+    return productosLS;
+}
+
+
+function actualizaCantidadProducto(prod) {
     const tablaCarrito = document.getElementById("lista-carrito");
     const filas = tablaCarrito.querySelectorAll("tbody tr");
     filas.forEach((fila) => {
         let cantidadElement = fila.querySelector(".cantidad-producto");
         let id = fila.querySelector("a").getAttribute('data-id');
-        if(prod.id == id){
-            cantidadElement.value = parseInt(cantidadElement.value)+1;
+        if (prod.id == id) {
+            cantidadElement.value = parseInt(cantidadElement.value) + 1;
             const cantidad = parseInt(cantidadElement.value);
         }
     });
-
 }
 
 function actualizaTotalLocalStorage() {
@@ -287,14 +260,14 @@ function actualizaTotalLocalStorage() {
         let cantidadElement = fila.querySelector(".cantidad-producto");
         const precioUnitarioElement = fila.querySelector("td:nth-child(3)");
         // const precioTotalElement = fila.querySelector(".precio-total");
-        if(cantidadElement){
+        if (cantidadElement) {
 
             // cantidadElement.value = parseInt(cantidadElement.value)+1;
             const cantidad = parseInt(cantidadElement.value);
             console.log("Cantidad:", cantidad);
             const precioUnitarioTexto = precioUnitarioElement.textContent.trim().replace("$", "");
             const precioUnitario = parseFloat(precioUnitarioTexto);
-    
+
             // Verifica si la conversión fue exitosa
             if (!isNaN(cantidad) && !isNaN(precioUnitario)) {
                 const precioTotal = cantidad * precioUnitario;
@@ -306,25 +279,9 @@ function actualizaTotalLocalStorage() {
 
     const totalCarritoElement = document.getElementById('total-carrito');
     totalCarritoElement.innerHTML = totalCarrito.toFixed(2);
-        console.log("Total del carrito:", totalCarrito);
+    console.log("Total del carrito:", totalCarrito);
 }
 
-
-//eliminar producto del LS
-function eliminarProdLS(producto) {
-    let productosLS;
-    let precio = 0;
-    //obtnemos el arreglo con los productos
-    productosLS = obtenerProductosLocalStorage();
-    //iteramo para buscar coincidencias y eliminar
-    productosLS.forEach(function (productoLS, index) {
-        //Operador avanzado &&
-        productoLS.id === producto && productosLS.splice(index, 1);
-    });
-
-    localStorage.setItem('productos', JSON.stringify(productosLS));
-    actualizaTotalLocalStorage();
-}
 
 //vacia Carrito
 function confirmacionVaciarCarrito() {
@@ -344,7 +301,6 @@ function confirmacionVaciarCarrito() {
                 Swal.fire(
                     'Eliminado!',
                 )
-                // return false;
             }
         })
     }
@@ -356,7 +312,7 @@ function confirmacionVaciarCarrito() {
     }
 }
 
-function vaciarCarrito(){
+function vaciarCarrito() {
     while (carritoProductos.firstChild) {
         carritoProductos.removeChild(carritoProductos.firstChild);
     }
@@ -390,46 +346,4 @@ function finalizaCompra() {
         })
     }
 }
-
-
-
-//animacion agregar al carrito
-// $('.agregar-carrito').on('click', function () {
-//     var cart = $('.carrito');
-//     var imgtodrag = $(this).parent('.item').find("img").eq(0);
-//     if (imgtodrag) {
-//         var imgclone = imgtodrag.clone()
-//             .offset({
-//             top: imgtodrag.offset().top,
-//             left: imgtodrag.offset().left
-//         })
-//             .css({
-//             'opacity': '0.5',
-//                 'position': 'absolute',
-//                 'height': '150px',
-//                 'width': '150px',
-//                 'z-index': '100'
-//         })
-//             .appendTo($('body'))
-//             .animate({
-//             'top': cart.offset().top + 10,
-//                 'left': cart.offset().left + 10,
-//                 'width': 75,
-//                 'height': 75
-//         }, 1000, 'easeInOutExpo');
-        
-//         setTimeout(function () {
-//             cart.effect("shake", {
-//                 times: 2
-//             }, 200);
-//         }, 1500);
-
-//         imgclone.animate({
-//             'width': 0,
-//                 'height': 0
-//         }, function () {
-//             $(this).detach()
-//         });
-//     }
-// });
 
