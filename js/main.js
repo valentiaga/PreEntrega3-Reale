@@ -23,7 +23,7 @@ eventslisteners();
 const llenarMain=(arr)=>{
     setTimeout(() => {  //para simular retraso desde la BD
         arr.forEach((elem) => {
-            const {imagen,precio,nombre, descripcion, codigo}=elem
+            const {imagen,precio,nombre, descripcion, id}=elem
     
             div_productos.innerHTML += `
             <div class="col-lg-4">
@@ -35,7 +35,7 @@ const llenarMain=(arr)=>{
                             <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
                             <p class="precio">$${precio}</p>
                             <!-- <span class="u-pull-right ">$15</span> -->
-                            <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="${codigo}">Agregar
+                            <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="${id}">Agregar
                                 Al Carrito</a>
                         </div>
                     </div> <!--.card-->
@@ -110,37 +110,68 @@ function comprarProducto(e) {
 
 //Funcion lee datos del producto
 function leeDatosProducto(prod) {
-    const infoProducto = {
-        imagen: prod.querySelector('img').src,
-        nombre: prod.querySelector('h4').textContent,
-        precio: prod.querySelector('.precio').textContent,
-        // descuento:
-        id: prod.querySelector('a').getAttribute('data-id')
+
+    let bandera = 0;
+    let productosLS = obtenerProductosLocalStorage();
+    productosLS.forEach((elem, i)=>{
+        if (elem.id == prod.querySelector('a').getAttribute('data-id') && bandera==0){
+            elem.cantidad = parseInt(elem.cantidad) + 1;
+            console.log("Cantidad de "+ elem.nombre +" "+ elem.cantidad);
+            bandera = 1;
+            localStorage.setItem('productos', JSON.stringify(productosLS));
+            //actualizar cantidad en interfaz de usuario
+            actualizaCantidadProducto(elem);
+            actualizaTotalLocalStorage();
+            i++;
+        }
+    });
+    if (bandera==0){
+        const infoProducto = {
+            imagen: prod.querySelector('img').src,
+            nombre: prod.querySelector('h4').textContent,
+            precio: prod.querySelector('.precio').textContent,
+            id: prod.querySelector('a').getAttribute('data-id'),
+            cantidad: 1
+        }
+        
+        insertaProducto(infoProducto);
     }
-    
-    insertaProducto(infoProducto);
 }
 
 // Funcion inserta producto en el carrito
 function insertaProducto(prod) {
-    const {imagen, nombre, precio}=prod;
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td><img src="${imagen}" width="100"></td>
-        <td>${nombre}</td>
-        <td>${precio}</td>
-        <td>
-            <div class="cantidad-control">
-                <span class="aumentar-cantidad">+</span>
-                <input type="number" class="cantidad-producto" value="1" min="1">
-                <span class="disminuir-cantidad">-</span>
-            </div>
-        </td>
-        <td><a href="#" class="borrar-producto" data-id="${prod.id}">X</a></td>     
-    `;
-    carritoProductos.appendChild(row);
+    // let bandera = 0;
+    // let productosLS = obtenerProductosLocalStorage();
+    // productosLS.forEach((elem, i)=>{
+    //     if (elem.id == prod.id){
+    //         elem.cantidad = parseInt(elem.cantidad) + 1;
+    //         console.log("Cantidad de "+ elem.nombre +" "+ elem.cantidad);
+    //         bandera = 1;
+    //         localStorage.setItem('productos', JSON.stringify(productosLS));
+    //         //actualizar cantidad en interfaz de usuario
+    //     }
+    // });
+    // if (bandera == 0){
+        const {imagen, nombre, precio}=prod;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><img src="${imagen}" width="100"></td>
+            <td>${nombre}</td>
+            <td>${precio}</td>
+            <td>
+                <div class="cantidad-control">
+                    <span class="aumentar-cantidad">+</span>
+                    <input type="number" class="cantidad-producto" value="1" min="1">
+                    <span class="disminuir-cantidad">-</span>
+                </div>
+            </td>
+            <td><a href="#" class="borrar-producto" data-id="${prod.id}">X</a></td>     
+        `;
+        carritoProductos.appendChild(row);
+        guardarProdLocalStorage(prod);
+    // }
 
-    guardarProdLocalStorage(prod);
+    
     actualizaTotalLocalStorage();
 }
 
@@ -205,7 +236,7 @@ function leerLS() {
     productosLS.forEach(function (producto) {
 
         //Desestructuracion
-        const { imagen, nombre, precio, id } = producto;
+        const { imagen, nombre, precio, id, cantidad } = producto;
 
         //Construimos el template
         const row = document.createElement("tr");
@@ -216,7 +247,7 @@ function leerLS() {
         <td>
             <div class="cantidad-control">
                 <span class="aumentar-cantidad">+</span>
-                <input type="number" class="cantidad-producto" value="1" min="1">
+                <input type="number" class="cantidad-producto" value="${cantidad}" min="1">
                 <span class="disminuir-cantidad">-</span>
             </div>
         </td>
@@ -225,6 +256,20 @@ function leerLS() {
         carritoProductos.appendChild(row);
     })
     actualizaTotalLocalStorage();
+}
+
+function actualizaCantidadProducto (prod){
+    const tablaCarrito = document.getElementById("lista-carrito");
+    const filas = tablaCarrito.querySelectorAll("tbody tr");
+    filas.forEach((fila) => {
+        let cantidadElement = fila.querySelector(".cantidad-producto");
+        let id = fila.querySelector("a").getAttribute('data-id');
+        if(prod.id == id){
+            cantidadElement.value = parseInt(cantidadElement.value)+1;
+            const cantidad = parseInt(cantidadElement.value);
+        }
+    });
+
 }
 
 function actualizaTotalLocalStorage() {
@@ -239,11 +284,12 @@ function actualizaTotalLocalStorage() {
 
     // Recorre las filas y actualiza el precio total de cada producto
     filas.forEach((fila) => {
-        const cantidadElement = fila.querySelector(".cantidad-producto");
+        let cantidadElement = fila.querySelector(".cantidad-producto");
         const precioUnitarioElement = fila.querySelector("td:nth-child(3)");
         // const precioTotalElement = fila.querySelector(".precio-total");
         if(cantidadElement){
 
+            // cantidadElement.value = parseInt(cantidadElement.value)+1;
             const cantidad = parseInt(cantidadElement.value);
             console.log("Cantidad:", cantidad);
             const precioUnitarioTexto = precioUnitarioElement.textContent.trim().replace("$", "");
