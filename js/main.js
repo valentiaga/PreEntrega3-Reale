@@ -7,12 +7,13 @@ const div_productos = document.getElementById("lista-productos");
 eventslisteners();
 
 // llamado a llenar main
-fetch('../json/data.json')
+fetch('https://raw.githubusercontent.com/valentiaga/Simulador-e-commerce/main/json/data.jsons')
     .then((resp) => resp.json())
     .then((data) => {
         let productos;
         const { cabezadas, recados, monturas } = data;
         productos = cabezadas.concat(recados, monturas);
+        console.log(productos);
         llenarMain(productos);
 
     })
@@ -30,6 +31,7 @@ const llenarMain = (arr) => {
                         <div class="info-card">
                             <h4>${nombre}</h4>
                             <p>${descripcion}</p>
+
                             <p class="precio">$${precio}</p>
                             <!-- <span class="u-pull-right ">$15</span> -->
                             <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="${id}">Agregar
