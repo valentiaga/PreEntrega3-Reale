@@ -7,7 +7,7 @@ const div_productos = document.getElementById("lista-productos");
 eventslisteners();
 
 // llamado a llenar main
-fetch('https://raw.githubusercontent.com/valentiaga/Simulador-e-commerce/main/json/data.jsons')
+fetch('../json/data.json')
     .then((resp) => resp.json())
     .then((data) => {
         let productos;
