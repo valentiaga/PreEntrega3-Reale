@@ -84,6 +84,7 @@ function leerLS() {
     let productosLS;
 
     productosLS = obtenerProductosLocalStorage();
+    console.log(productosLS);
     const total = document.getElementById('total-carrito');
     total.innerHTML = obtenerTotalLocalStorage();
 
