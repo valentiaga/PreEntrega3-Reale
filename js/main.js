@@ -7,7 +7,7 @@ const div_productos = document.getElementById("lista-productos");
 eventslisteners();
 
 // llamado a llenar main
-fetch('./json/data.json')
+fetch('../json/data.json')
     .then((resp) => resp.json())
     .then((data) => {
         let productos;
@@ -30,7 +30,6 @@ const llenarMain = (arr) => {
                         <div class="info-card">
                             <h4>${nombre}</h4>
                             <p>${descripcion}</p>
-                            <img src="http://programacion.net/files/article/20160811120805_estrellas.png" width="50">
                             <p class="precio">$${precio}</p>
                             <!-- <span class="u-pull-right ">$15</span> -->
                             <a href="#" class="u-full-width button-primary button input agregar-carrito" data-id="${id}">Agregar
